@@ -33,7 +33,7 @@ stages:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
-            command: 'destroy'
+            command: 'apply'
             workingDirectory: '$(workdir)'
             commandOptions: '--auto-approve'
             environmentServiceNameAzureRM: 'HLD'
