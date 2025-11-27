@@ -22,11 +22,6 @@ module "compute" {
   nsg_id = module.nsg.nsg_id
 }
 
-module "key_vault" {
-  depends_on = [ module.rg ]
-  source = "../../Modules/key_vault"
-  new_vms = var.new_vms  
-}
 
 module "sql-server" {
   depends_on = [ module.rg ]
