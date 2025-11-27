@@ -21,3 +21,16 @@ module "compute" {
   new_vms    = var.new_vms
   nsg_id = module.nsg.nsg_id
 }
+
+module "key_vault" {
+  depends_on = [ module.rg ]
+  source = "../../Modules/key_vault"
+  new_vms = var.new_vms  
+}
+
+module "sql-server" {
+  depends_on = [ module.rg ]
+  source = "../../Modules/mysql_server"
+  mysql_server = var.mysql_server
+  todo_database = var.todo_database
+}

@@ -1,24 +1,14 @@
 
 # to create resource group
 
-variable "rgs" {
+variable "rgs" {}
 
-}
+variable "networks" {}
 
-# to create network resources 
+variable "new_vms" {}
 
-variable "networks" {
+variable "nsg" {}
 
-}
+variable "mysql_server" {}
 
-# nic & VM
-
-variable "new_vms" {
-
-}
-
-# nsg
-variable "nsg" {
-
-}
-
+variable "todo_database" {}
