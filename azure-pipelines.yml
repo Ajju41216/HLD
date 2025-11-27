@@ -26,6 +26,6 @@ stages:
         - task: CmdLine@2
           continueOnError: true
           inputs:
-            script: 'tflint.exe --chdir=. --recursive --loglevel=debug'
+            script: 'tflint.exe --chdir=. --recursive'
             workingDirectory: '$(workdir)'
   
