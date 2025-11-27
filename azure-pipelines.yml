@@ -25,6 +25,6 @@ stages:
         steps:
         - task: CmdLine@2
           inputs:
-            script: 'tflint.exe --chdir=. --recursive'
+            script: 'tflint.exe --chdir=. --recursive --loglevel=debug'
             workingDirectory: '$(workdir)'
   
