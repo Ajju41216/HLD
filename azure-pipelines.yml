@@ -19,13 +19,21 @@ stages:
             backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
             backendAzureRmContainerName: 'hld-container'
             backendAzureRmKey: 'dev.terraform.tfvars'
-  - stage: 
-    jobs:
-      - job: 
-        steps:
-        - task: CmdLine@2
-          continueOnError: true
+        - task: TerraformTask@5
           inputs:
-            script: 'tflint.exe --chdir=. --recursive'
+            provider: 'azurerm'
+            command: 'plan'
             workingDirectory: '$(workdir)'
-  
+            environmentServiceNameAzureRM: 'HLD'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(workdir)'
+            environmentServiceNameAzureRM: 'HLD'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'output'
+            workingDirectory: '$(workdir)'
+            environmentServiceNameAzureRM: 'HLD'
