@@ -1,4 +1,6 @@
 
+# we used data block to fetch the resouce details which is already thrir in Cloud.
+
 data "azurerm_subnet" "subnet" {
   for_each             = var.new_vms
   name                 = each.value.subnetname
@@ -7,6 +9,7 @@ data "azurerm_subnet" "subnet" {
 }
 
 #local to have multiple NIC
+
 locals {
   all_nics = merge([
     for vm_key, vm in var.new_vms : {
@@ -82,51 +85,3 @@ resource "azurerm_network_interface_security_group_association" "nic_nsg" {
   network_interface_id      = each.value.id
   network_security_group_id = var.nsg_id
 }
-
-# #1
-# data "azurerm_public_ip" "pip" {
-#   for_each            = var.new_vms
-#   name                = each.value.pip_name
-#   resource_group_name = each.value.resource_group_name
-# }
-
-#2
-
-
-# nic
-
-# resource "azurerm_network_interface" "vms_nic" {
-#   for_each            = var.new_vms
-#   name                = each.value.nics
-#   location            = each.value.location
-#   resource_group_name = each.value.resource_group_name
-#   ip_configuration {
-#     name                          = "internal"
-#     subnet_id                     = data.azurerm_subnet.subnet[each.key].id
-#     private_ip_address_allocation = "Dynamic"
-#     public_ip_address_id          = data.azurerm_public_ip.pip[each.key].id
-#   }
-# }
-
-# vm
-
-
-
-
-
-
-
-
-
-
-# network_interface_ids = [
-#   azurerm_network_interface.vms_nic[each.key].id, azurerm_network_interface.vms_nic_2[each.key].id
-# ]
-# network_interface_ids = [
-#   for nic_key, nic in azurerm_network_interface.vms_nic :
-#   nic.id if startswith(nic_key, each.key)
-# ]
-#  network_interface_ids = compact([
-#   for nic_key, nic in azurerm_network_interface.vms_nic :
-#   nic.id if nic_key == each.key
-# ])

@@ -1,5 +1,5 @@
-
 # to create Resource group
+
 rgs = {
   rg1 = {
     name     = "rg-pilu-dev-todoapp-01"
@@ -7,7 +7,7 @@ rgs = {
   }
 }
 
-# first network along with Subnets
+# first network along with Subnets we used Dynanic Block
 networks = {
   vnet1 = {
     name                = "vnet_1"
@@ -27,25 +27,25 @@ networks = {
   }
 }
 
-# nsg
+# nsg where we used rules with Dynamic Block
 nsg = {
-    name                = "to-do-frt-nsg"
-    location            = "centralindia"
-    resource_group_name = "rg-pilu-dev-todoapp-01"
-    security_rules = [
-      {
-        name                       = "nsg-rule1"
-        priority                   = 100
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = "*"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-      }
-    ]
-  
+  name                = "to-do-frt-nsg"
+  location            = "centralindia"
+  resource_group_name = "rg-pilu-dev-todoapp-01"
+  security_rules = [
+    {
+      name                       = "nsg-rule1"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  ]
+
 }
 # NIC following VM and key_vault
 new_vms = {
@@ -56,7 +56,7 @@ new_vms = {
     resource_group_name             = "rg-pilu-dev-todoapp-01"
     size                            = "Standard_B2s"
     disable_password_authentication = "false"
-    # NICs as inner map
+    # NICs as inner map we used Dynamic Block
     nics = {
       nic1 = {
         nic_name   = "frontend-nic1"
@@ -71,6 +71,10 @@ new_vms = {
     pip_name   = "pip-pilu-dev-todoapp-01"
     subnetname = "subnet-01"
     sku_name   = "standard"
+    #arguments that we need for key_block
+    name_key                   = "hldkey12vault32"
+    soft_delete_retention_days = "7"
+
   },
   vm2 = {
     vm_name                         = "frountend-vm2"
@@ -94,20 +98,29 @@ new_vms = {
     pip_name   = "pip-pilu-dev-todoapp-02"
     subnetname = "subnet-02"
     sku_name   = "standard"
-    # ngs group arguments
-    nsg_name = "to-do-bck-nsg"
-    nsg2 = [{
-      name                       = "nsg-rule1"
-      priority                   = 100
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "Tcp"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-      }
-    ]
+    #arguments that we need for key_block
+    name_key                   = "hldkey234091vault"
+    soft_delete_retention_days = "7"
   }
 }
 
+mysql_server = {
+  mysql-1 = {
+    name                   = "todo-database"
+    location               = "centralindia"
+    resource_group_name    = "rg-pilu-dev-todoapp-01"
+    administrator_login    = "testadminuser"
+    administrator_password = "Cidrtest@123"
+    sku_name               = "B_Standard_B1ms"
+  }
+}
+
+todo_database = {
+  app-db = {
+    name                = "my-application-db"
+    resource_group_name = "rg-pilu-dev-todoapp-01"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+
+  }
+}
