@@ -1,11 +1,14 @@
 trigger: none
-pool: HLD
+
 variables:
   workdir: '$(System.DefaultWorkingDirectory)/HLD/dev/frountend'
+
 stages:
-  - stage: 
+  - stage: InstallInit
+    displayName: "Terraform install & init"
     jobs:
-      - job: 
+      - job: InstallInitJob
+        displayName: "Terraform init"
         steps:
         - task: TerraformInstaller@1
           inputs:
@@ -19,18 +22,42 @@ stages:
             backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
             backendAzureRmContainerName: 'hld-container'
             backendAzureRmKey: 'dev.terraform.tfvars'
+
+  - stage: TerraformStageplan
+    displayName: "Terraform Stage"
+    dependsOn: InstallInit
+    jobs:
+      - job: TerraformJob
+        displayName: "Terraform Plan Job"
+        steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'plan'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
+
+  - stage: TerraformApply
+    displayName: "Terraform apply"
+    dependsOn: TerraformStageplan
+    jobs:
+      - job: ApplyJob
+        displayName: "Terraform Apply Job"
+        steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'apply'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
+
+  - stage: TerraformOutput
+    displayName: "Terraform output"
+    dependsOn: TerraformApply
+    jobs:
+      - job: OutputJob
+        displayName: "Terraform Output Job"
+        steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
