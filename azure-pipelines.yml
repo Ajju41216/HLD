@@ -1,18 +1,21 @@
 trigger: none
-
+pool: HLD
 variables:
   workdir: '$(System.DefaultWorkingDirectory)/HLD/dev/frountend'
-
 stages:
-  - stage: InstallInit
-    displayName: "Terraform install & init"
+  - stage: 
+    displayName: terrafrom install
     jobs:
-      - job: InstallInitJob
-        displayName: "Terraform init"
+      - job: 
         steps:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
+  - stage: 
+    displayName: terrafrom init
+    jobs:
+      - job: 
+        steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
@@ -22,13 +25,20 @@ stages:
             backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
             backendAzureRmContainerName: 'hld-container'
             backendAzureRmKey: 'dev.terraform.tfvars'
-
-  - stage: TerraformStageplan
-    displayName: "Terraform Stage"
-    dependsOn: InstallInit
+  - stage: Scanning 
+    displayName: tfscan
     jobs:
-      - job: TerraformJob
-        displayName: "Terraform Plan Job"
+      - job: 
+        displayName: TFSEC Scanning Wala Job
+        steps:
+        - task: fsec
+          inputs:
+            version:  'v1.26.0'
+            dir: '$(workdir)'
+  - stage: 
+    displayName: terrafrom plan
+    jobs:
+      - job: 
         steps:
         - task: TerraformTask@5
           inputs:
@@ -36,31 +46,14 @@ stages:
             command: 'plan'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
-
-  - stage: TerraformApply
-    displayName: "Terraform apply"
-    dependsOn: TerraformStageplan
+  - stage: 
+    displayName: terrafrom apply
     jobs:
-      - job: ApplyJob
-        displayName: "Terraform Apply Job"
+      - job: 
         steps:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
             command: 'apply'
-            workingDirectory: '$(workdir)'
-            environmentServiceNameAzureRM: 'HLD'
-
-  - stage: TerraformOutput
-    displayName: "Terraform output"
-    dependsOn: TerraformApply
-    jobs:
-      - job: OutputJob
-        displayName: "Terraform Output Job"
-        steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'output'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
