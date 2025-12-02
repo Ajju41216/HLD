@@ -3,7 +3,7 @@ pool: HLD
 variables:
   workdir: '$(System.DefaultWorkingDirectory)/HLD/dev/frountend'
 stages:
-  - stage: 
+  - stage: install
     displayName: terrafrom install
     jobs:
       - job: 
@@ -11,7 +11,7 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
-  - stage: 
+  - stage: init
     displayName: terrafrom init
     jobs:
       - job: 
@@ -25,17 +25,17 @@ stages:
             backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
             backendAzureRmContainerName: 'hld-container'
             backendAzureRmKey: 'dev.terraform.tfvars'
-  - stage: Scanning 
+  - stage: TFScanning 
     displayName: tfscan
     jobs:
       - job: 
         displayName: TFSEC Scanning Wala Job
         steps:
-        - task: fsec
+        - task: tfsec@1
           inputs:
-            version:  'v1.26.0'
-            dir: '$(workdir)'
-  - stage: 
+            version: 'v1.26.0'
+            dir: '$(workDir)'
+  - stage: plan
     displayName: terrafrom plan
     jobs:
       - job: 
@@ -46,7 +46,7 @@ stages:
             command: 'plan'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
-  - stage: 
+  - stage: apply
     displayName: terrafrom apply
     jobs:
       - job: 
