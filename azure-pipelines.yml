@@ -48,6 +48,7 @@ stages:
             environmentServiceNameAzureRM: 'HLD'
   - stage: apply
     displayName: terrafrom apply
+    dependsOn: plan
     jobs:
       - job: 
         steps:
