@@ -70,8 +70,7 @@ stages:
         - task: ManualValidation@1
           inputs:
             notifyUsers: 'singhchahalajmer@gmail.com'
-            approvers: 'Ajmer'
-            allowApproversToApproveTheirOwnRuns: false
+            approvers: 'singhchahalajmer@gmail.com'
             instructions: 'Test pipeline'
   - stage: apply
     displayName: terrafrom apply
