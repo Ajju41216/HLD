@@ -13,6 +13,7 @@ stages:
             terraformVersion: 'latest'
   - stage: init
     displayName: terrafrom init
+    dependsOn: install
     jobs:
       - job: 
         steps:
@@ -27,6 +28,7 @@ stages:
             backendAzureRmKey: 'dev.terraform.tfvars'
   - stage: TFScanning 
     displayName: tfscan
+    dependsOn: init
     jobs:
       - job: 
         displayName: TFSEC Scanning Wala Job
@@ -37,6 +39,7 @@ stages:
             dir: '$(workDir)'
   - stage: plan
     displayName: terrafrom plan
+    dependsOn: TFScanning
     jobs:
       - job: 
         steps:
