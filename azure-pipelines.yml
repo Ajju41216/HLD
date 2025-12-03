@@ -46,6 +46,15 @@ stages:
         - task: TerraformTask@5
           inputs:
             provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(workdir)'
+            backendServiceArm: 'HLD'
+            backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
+            backendAzureRmContainerName: 'hld-container'
+            backendAzureRmKey: 'dev.terraform.tfvars'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
             command: 'plan'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
