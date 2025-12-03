@@ -35,7 +35,7 @@ stages:
         steps:
         - task: tfsec@1
           inputs:
-            version: 'v1.26.0'
+            version: 'v1.28.14'
             dir: '$(workDir)'
   - stage: plan
     displayName: terrafrom plan
