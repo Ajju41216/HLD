@@ -36,6 +36,7 @@ stages:
     dependsOn: SecurityScan
     jobs:
       - job: 
+        displayName: terraforminit
         steps:
         - task: TerraformTask@5
           inputs:
@@ -52,6 +53,14 @@ stages:
             command: 'plan'
             workingDirectory: '$(workdir)'
             environmentServiceNameAzureRM: 'HLD'
+      - job: 
+        displayName: infracost
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'infracost breakdown --path=.'
+            workingDirectory: '$(workdir)'
   - stage: Approval
     displayName: ManualApproval
     pool: server
@@ -62,6 +71,7 @@ stages:
           inputs:
             notifyUsers: 'singhchahalajmer@gmail.com'
             approvers: 'Ajmer'
+            allowApproversToApproveTheirOwnRuns: false
             instructions: 'Test pipeline'
   - stage: apply
     displayName: terrafrom apply
