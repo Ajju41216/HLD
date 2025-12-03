@@ -59,7 +59,7 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'infracost breakdown --path=.tfvars'
+            script: 'infracost breakdown --path=.'
             workingDirectory: '$(workdir)'
   - stage: Approval
     displayName: ManualApproval
