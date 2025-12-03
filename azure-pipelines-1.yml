@@ -1,0 +1,38 @@
+trigger: none
+pool: HLD
+variables:
+  workdir: '$(System.DefaultWorkingDirectory)/HLD/dev/frountend'
+stages:
+  - stage: 
+    displayName: Terraform Init
+    jobs:
+      - job: 
+        displayName: Terrafrominit
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(workdir)'
+            backendServiceArm: 'HLD'
+            backendAzureRmStorageAccountName: 'hld12345terraformpipe1'
+            backendAzureRmContainerName: 'hld-container'
+            backendAzureRmKey: 'dev.terraform.tfvars'
+  - stage: 
+    displayName: ManualApproval
+    pool: server
+    jobs:
+      - job:
+        displayName: ApprovalToRemove 
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'destroy'
+            workingDirectory: '$(workdir)'
+            environmentServiceNameAzureRM: 'HLD'
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'singhchahalajmer@gmail.com'
+            approvers: 'singhchahalajmer@gmail.com'
+            instructions: 'Remove resources'
