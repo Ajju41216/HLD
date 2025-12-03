@@ -31,27 +31,9 @@ stages:
           inputs:
             version: 'v1.28.14'
             dir: '$(workDir)'
-  - stage: Validate
-    displayName: "Terraform Code Validation"
-    jobs:
-      - job: 
-        steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'custom'
-            workingDirectory: '$(workdir)'
-            outputTo: 'console'
-            customCommand: 'fmt'
-            environmentServiceNameAzureRM: 'HLD'
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-            workingDirectory: '$(workdir)'
   - stage: plan
     displayName: "Terraform Plan - Test"
-    dependsOn: Validate
+    dependsOn: SecurityScan
     jobs:
       - job: 
         steps:
