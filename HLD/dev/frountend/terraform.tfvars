@@ -119,8 +119,8 @@ todo_database = {
   app-db = {
     name                = "my-application-db"
     resource_group_name = "rg-pilu-dev-todoapp-01"
-    charset   = "utf8mb4"
-    collation = "utf8mb4_unicode_ci"
+    charset             = "utf8mb4"
+    collation           = "utf8mb4_unicode_ci"
 
   }
 }

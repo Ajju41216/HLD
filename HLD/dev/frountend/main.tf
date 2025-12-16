@@ -19,13 +19,12 @@ module "compute" {
   depends_on = [module.network, module.rg]
   source     = "../../Modules/azurerm_compute"
   new_vms    = var.new_vms
-  nsg_id = module.nsg.nsg_id
+  nsg_id     = module.nsg.nsg_id
 }
 
-
 module "sql-server" {
-  depends_on = [ module.rg ]
-  source = "../../Modules/mysql_server"
-  mysql_server = var.mysql_server
+  depends_on    = [module.rg]
+  source        = "../../Modules/mysql_server"
+  mysql_server  = var.mysql_server
   todo_database = var.todo_database
 }
